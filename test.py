@@ -1,9 +1,9 @@
 import pyaudio
 import wave
 import vaderSentiment
-import speech_recognition
+import speech_recognition as sr
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
- 
+import record
 def sentiment_scores(sentence):
  
     # Create a SentimentIntensityAnalyzer object.
@@ -36,43 +36,5 @@ def sentiment_scores(sentence):
 
 if __name__ == "__main__" :
     
-    CHUNK = 1024
-    FORMAT = pyaudio.paInt16
-    CHANNELS = 2
-    RATE = 44100
-    RECORD_SECONDS = 5
-    WAVE_OUTPUT_FILENAME = "output.wav"
-
-    p = pyaudio.PyAudio()
-
-    stream = p.open(format=FORMAT,
-                    channels=CHANNELS,
-                    rate=RATE,
-                    input=True,
-                    frames_per_buffer=CHUNK)
-
-    print("* recording")
-
-    frames = []
-
-    for i in range(0, int(RATE / CHUNK * RECORD_SECONDS)):
-        data = stream.read(CHUNK)
-        frames.append(data)
-
-    print("* done recording")
-
-    stream.stop_stream()
-    stream.close()
-    p.terminate()
-
-    data = b''.join(frames).decode("utf-8")
+    sentiment_scores(record.record_data())
  
-    sentiment_scores(data)
- 
-    print("\n2nd Statement :")
-    sentence = "study is going on as usual"
-    sentiment_scores(sentence)
- 
-    print("\n3rd Statement :")
-    sentence = "I am very sad today."
-    sentiment_scores(sentence)
